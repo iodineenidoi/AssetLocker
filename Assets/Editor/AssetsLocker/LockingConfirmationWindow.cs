@@ -24,7 +24,7 @@ namespace AssetsLocker
             
             _objects = instancesIDs.Select(EditorUtility.InstanceIDToObject).ToList();
             _repositoryInformation = RepositoryInformation.GetRepositoryInformation();
-            _settings = Resources.Load<LockerApiSettings>("Editor/AssetsLocker/Locker Api Settings");
+            _settings = LockerApiSettings.GetInstance();
 
             _currentUserName = _settings.UseGitInfo
                 ? _repositoryInformation.CurrentUserName

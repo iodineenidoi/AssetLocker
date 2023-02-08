@@ -17,7 +17,7 @@ namespace AssetsLocker
         public LockerApi()
         {
             _repositoryInformation = RepositoryInformation.GetRepositoryInformation();
-            _settings = Resources.Load<LockerApiSettings>("Editor/AssetsLocker/Locker Api Settings");
+            _settings = LockerApiSettings.GetInstance();
         }
 
         public async void GetRandom()

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 
 namespace AssetsLocker
 {
@@ -14,5 +15,10 @@ namespace AssetsLocker
         public bool UseGitInfo => useGitInfo;
         public string NotGitName => notGitName;
         public string NotGitBrunch => notGitBrunch;
+
+        public static LockerApiSettings GetInstance()
+        {
+            return AssetDatabase.LoadAssetAtPath<LockerApiSettings>("Assets/Editor/AssetsLocker/Settings/Locker Api Settings.asset");
+        }
     }
 }
