@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Root">
+        <ui:Label text="Locker Api User Settings" display-tooltip-when-elided="true" style="font-size: 20px; padding-left: 4px; padding-right: 0; padding-top: 2px; -unity-font-style: bold; margin-bottom: 5px;" />
+        <ui:VisualElement name="GitSection">
+            <ui:Toggle label="Use Git Information" name="UseGitInfo" value="true" />
+            <ui:TextField picking-mode="Ignore" label="Custom Name" value="fool" text="fool" name="OverrideName" style="display: flex; visibility: visible; opacity: 1;" />
+            <ui:TextField picking-mode="Ignore" label="Custom Brunch" value="fool_brunch" text="fool_brunch" name="OverrideBrunch" style="justify-content: center;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
