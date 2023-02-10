@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="NetworkSettings" style="padding-left: 4px; padding-right: 0; padding-top: 0; padding-bottom: 0;">
+        <ui:Label text="Network Settings" display-tooltip-when-elided="true" name="Title" style="font-size: 20px; -unity-font-style: bold; height: 30px; margin-left: 3px; margin-top: 2px;" />
+        <ui:TextField picking-mode="Ignore" label="Server Address" value="filler text" text="localhost" name="ServerAddress" style="justify-content: space-between; align-items: center; flex-direction: row;" />
+    </ui:VisualElement>
+</ui:UXML>
