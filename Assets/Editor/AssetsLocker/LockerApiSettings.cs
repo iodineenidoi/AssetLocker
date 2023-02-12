@@ -16,9 +16,11 @@ namespace AssetsLocker
         public string NotGitName => notGitName;
         public string NotGitBrunch => notGitBrunch;
 
+        private static LockerApiSettings _instance;
+        
         public static LockerApiSettings GetInstance()
         {
-            return AssetDatabase.LoadAssetAtPath<LockerApiSettings>("Assets/Editor/AssetsLocker/Settings/Locker Api Settings.asset");
+            return _instance ??= AssetDatabase.LoadAssetAtPath<LockerApiSettings>("Assets/Editor/AssetsLocker/Settings/Locker Api Settings.asset");
         }
     }
 }

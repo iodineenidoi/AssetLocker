@@ -11,12 +11,10 @@ namespace AssetsLocker
 {
     public class LockerApi
     {
-        private RepositoryInformation _repositoryInformation;
         private LockerApiSettings _settings;
         
         public LockerApi()
         {
-            _repositoryInformation = RepositoryInformation.GetRepositoryInformation();
             _settings = LockerApiSettings.GetInstance();
         }
 
@@ -49,7 +47,7 @@ namespace AssetsLocker
             IsLockedRequest request = new IsLockedRequest
             {
                 Project = Application.productName,
-                User = GetUserName(),
+                User = UserHelper.GetUserName(),
                 Asset = asset
             };
 
@@ -70,10 +68,10 @@ namespace AssetsLocker
             {
                 Project = Application.productName,
                 Message = message,
-                User = GetUserName(),
+                User = UserHelper.GetUserName(),
                 Assets = assets,
                 LockTime = DateTime.Now,
-                Brunch = GetGitBrunch()
+                Brunch = UserHelper.GetGitBrunch()
             };
 
             string contentJson = Newtonsoft.Json.JsonConvert.SerializeObject(request);
@@ -92,7 +90,7 @@ namespace AssetsLocker
             UnlockAssetsRequest request = new UnlockAssetsRequest
             {
                 Project = Application.productName,
-                User = GetUserName(),
+                User = UserHelper.GetUserName(),
                 Assets = assets
             };
 
@@ -103,20 +101,6 @@ namespace AssetsLocker
 
             UnlockAssetsResponse response = Newtonsoft.Json.JsonConvert.DeserializeObject<UnlockAssetsResponse>(stringResponse);
             return response;
-        }
-
-        private string GetUserName()
-        {
-            return _settings.UseGitInfo
-                ? _repositoryInformation.CurrentUserName
-                : _settings.NotGitName;
-        }
-
-        private string GetGitBrunch()
-        {
-            return _settings.UseGitInfo
-                ? _repositoryInformation.BranchName
-                : _settings.NotGitBrunch;
         }
     }
 }
