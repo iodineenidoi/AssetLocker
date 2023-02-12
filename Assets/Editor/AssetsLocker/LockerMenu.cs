@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AssetsLocker.Api;
+using AssetsLocker.UI.UnlockAssetsResults;
 using UnityEditor;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ namespace AssetsLocker
 
             LockerApi api = new LockerApi();
             UnlockAssetsResponse response = await api.UnlockAssets(paths);
-            ResponseHandler(response);
+            UnlockAssetsResults.ShowResults(response);
         }
 
         private static List<string> GetPaths()
@@ -33,33 +34,6 @@ namespace AssetsLocker
                 .Select(id => EditorUtility.InstanceIDToObject(id))
                 .Select(obj => AssetDatabase.GetAssetPath(obj))
                 .ToList();
-        }
-        
-        private static void ResponseHandler(UnlockAssetsResponse response)
-        {
-            if (response.Unlocked.Any())
-            {
-                EditorUtility.DisplayDialog(
-                "Success!",
-                $"{response.Unlocked.Count} {(response.Unlocked.Count > 1 ? "assets were" : "asset was")} successfully unlocked",
-                "Got it!");
-            }
-            
-            foreach (string asset in response.WasntLocked)
-            {
-                EditorUtility.DisplayDialog(
-                    "Asset was free",
-                    $"\"{asset}\" wasn't locked.",
-                    "Got it!");
-            }
-            
-            foreach (AssetData asset in response.LockedByOtherUser)
-            {
-                EditorUtility.DisplayDialog(
-                    $"Locked by \"{asset.User}\"",
-                    asset.ToString(),
-                    "Got it!");
-            }
         }
     }
 }
