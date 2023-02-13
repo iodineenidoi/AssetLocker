@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AssetsLocker.Api;
@@ -61,18 +62,21 @@ namespace AssetsLocker.UI.LockedAssetsInfo
                 foreach (AssetData assetData in _response.LockedAssets)
                 {
                     Foldout assetDataInfoPanel = RuntimeElementsCreator.CreateAssetDataInfoPanel(assetData);
-                    Button actionButton = new Button();
+                    assetDataInfoPanel.Query("ActionPanel").First().style.display = new StyleEnum<DisplayStyle>(DisplayStyle.Flex);
+                    assetDataInfoPanel.Query<Label>("ForceUnlockResult").First().text = string.Empty;
+
+                    Button actionButton = assetDataInfoPanel.Query<Button>("ActionButton").First();
                     if (assetData.User == currentUser)
                     {
-                        actionButton.clickable.clicked += () => UnlockAsset(assetData.Path, root);
+                        actionButton.clickable.clicked += UnlockAction(assetData.Path, root);
                         actionButton.text = "Unlock Asset";
                     }
                     else
                     {
-                        actionButton.clickable.clicked += () => ForceUnlockAsset(assetData.Path);
+                        actionButton.clickable.clicked += ForceUnlockAction(assetData.Path, assetDataInfoPanel, root);
                         actionButton.text = "Force Unlock Asset";
                     }
-                    assetDataInfoPanel.Add(actionButton);
+
                     view.Add(assetDataInfoPanel);
                 }
             }
@@ -82,6 +86,16 @@ namespace AssetsLocker.UI.LockedAssetsInfo
             }
         }
 
+        private Action UnlockAction(string path, VisualElement root)
+        {
+            return () => UnlockAsset(path, root);
+        }
+
+        private Action ForceUnlockAction(string path, Foldout assetDataInfoPanel, VisualElement root)
+        {
+            return () => ForceUnlockAsset(path, assetDataInfoPanel, root);
+        }
+
         private async void UnlockAsset(string path, VisualElement root)
         {
             LockerApi api = new LockerApi();
@@ -89,9 +103,19 @@ namespace AssetsLocker.UI.LockedAssetsInfo
             OnUpdateButtonClickedHandler(root);
         }
 
-        private void ForceUnlockAsset(string path)
+        private async void ForceUnlockAsset(string path, Foldout assetDataInfoPanel, VisualElement root)
         {
-            
+            LockerApi api = new LockerApi();
+            ForceUnlockResponse response = await api.ForceUnlock(path);
+            if (response.RequestsLeft > 0)
+            {
+                string text = $"{response.RequestsLeft} force unlock requests left from other users.";
+                assetDataInfoPanel.Query<Label>("ForceUnlockResult").First().text = text;
+            }
+            else
+            {
+                OnUpdateButtonClickedHandler(root);
+            }
         }
     }
 }

@@ -102,5 +102,25 @@ namespace AssetsLocker
             UnlockAssetsResponse response = Newtonsoft.Json.JsonConvert.DeserializeObject<UnlockAssetsResponse>(stringResponse);
             return response;
         }
+
+        public async Task<ForceUnlockResponse> ForceUnlock(string asset)
+        {
+            using HttpClient client = new HttpClient();
+
+            ForceUnlockRequest request = new ForceUnlockRequest
+            {
+                Asset = asset,
+                Project = Application.productName,
+                User = UserHelper.GetUserName()
+            };
+
+            string contentJson = Newtonsoft.Json.JsonConvert.SerializeObject(request);
+            HttpContent content = new StringContent(contentJson, Encoding.UTF8, MediaTypeNames.Application.Json);
+            var responseMessage = await client.PostAsync($"{_settings.ServerUrl}/forceUnlock", content);
+            var stringResponse = await responseMessage.Content.ReadAsStringAsync();
+            
+            ForceUnlockResponse response = Newtonsoft.Json.JsonConvert.DeserializeObject<ForceUnlockResponse>(stringResponse);
+            return response;
+        }
     }
 }
