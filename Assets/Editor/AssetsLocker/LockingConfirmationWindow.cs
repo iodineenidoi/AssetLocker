@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using AssetsLocker.Api;
 using UnityEditor;
 using UnityEngine;
@@ -85,29 +86,18 @@ namespace AssetsLocker
 
         private void ResponseHandler(LockAssetsResponse response)
         {
+            StringBuilder builder = new StringBuilder();
             if (response.Saved.Any())
-            {
-                EditorUtility.DisplayDialog(
-                    "Success!",
-                    $"{response.Saved.Count} {(response.Saved.Count > 1 ? "assets were" : "asset was")} successfully locked",
-                    "Got it!");
-            }
-            else
-            {
-                EditorUtility.DisplayDialog(
-                    "Failed!",
-                    "No asset was locked for editing!",
-                    "Got it!");
-            }
+                builder.AppendLine($"{response.Saved.Count} assets locked successfully");
 
-            foreach (AssetData asset in response.Failed)
+            if (response.Failed.Any())
+                builder.AppendLine($"{response.Failed.Count} assets couldn't be locked.");
+
+            string message = builder.ToString();
+            if (!string.IsNullOrWhiteSpace(message))
             {
-                EditorUtility.DisplayDialog(
-                    "Can't lock the asset.",
-                    asset.ToString(),
-                    "Got it!");
+                EditorUtility.DisplayDialog("Results", message, "Got It!");
             }
         }
-        
     }
 }
